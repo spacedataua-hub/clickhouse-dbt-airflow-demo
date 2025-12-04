@@ -34,13 +34,13 @@ def get_yesterday():
 # 3. Делаем GET-запросы и собираем все страницы в список.
 def get_affise_data():
     url = "http://.affise.com/3.0/stats/serverpostbacks"
-    headers = {"API-Key": "f9c39f537778acec16661614deca556d"}
+    headers = {"API-Key": "f9c39f53777"}
     params = {
         "date_from": get_yesterday(),
         "date_to": get_yesterday(),
         "page": 1,
         "limit": 500,
-        "supplier[]": ["65fc16870c793c6e125795a8"]
+        "supplier[]": ["65fc16870c7938"]
     }
 
     all_data = []  # общий список для всех постбеков
