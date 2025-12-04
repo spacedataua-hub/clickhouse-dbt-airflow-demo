@@ -1,0 +1,12 @@
+# Airflow core
+apache-airflow==2.9.0
+
+# API client
+requests
+
+# ClickHouse driver
+clickhouse-driver
+
+# Дополнительно (удобные утилиты)
+pandas
+python-dotenv
