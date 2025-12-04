@@ -1,0 +1,41 @@
+version: '3'
+services:
+  # База данных для Airflow
+  postgres:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # Планировщик Airflow
+  airflow-scheduler:
+    image: apache/airflow:2.9.0
+    command: scheduler
+    environment:
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/plugins:/opt/airflow/plugins
+    depends_on:
+      - postgres
+
+  # Веб-интерфейс Airflow
+  airflow-webserver:
+    image: apache/airflow:2.9.0
+    command: webserver
+    environment:
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/plugins:/opt/airflow/plugins
+    depends_on:
+      - postgres
+      - airflow-scheduler
+
+volumes:
+  postgres_data:
