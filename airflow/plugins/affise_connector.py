@@ -34,13 +34,13 @@ def get_yesterday():
 # 3. Делаем GET-запросы и собираем все страницы в список.
 def get_affise_data():
     url = "http://.affise.com/3.0/stats/serverpostbacks"
-    headers = {"API-Key": "f9c39f53777"}
+    headers = {"API-Key": "53777"}
     params = {
         "date_from": get_yesterday(),
         "date_to": get_yesterday(),
         "page": 1,
         "limit": 500,
-        "supplier[]": ["65fc16870c7938"]
+        "supplier[]": ["670c7938"]
     }
 
     all_data = []  # общий список для всех постбеков
@@ -71,9 +71,7 @@ def get_affise_data():
 # Функция: создать таблицу в ClickHouse (если её нет)
 # ==============================
 # Здесь мы описываем схему таблицы:
-# - Колонки соответствуют полям из API Affise
-# - ENGINE = MergeTree — стандартный движок для хранения
-# - ORDER BY id — упорядочивание по ключу
+# 
 def ensure_table_exists(client):
     client.execute('''
         CREATE TABLE IF NOT EXISTS affise_postbacks (
@@ -93,10 +91,7 @@ def ensure_table_exists(client):
 # ==============================
 # Функция: запись данных в ClickHouse
 # ==============================
-# 1. Инициализируем клиент ClickHouse.
-# 2. Проверяем/создаём таблицу.
-# 3. Преобразуем данные API в список кортежей.
-# 4. Вставляем данные батчом через INSERT.
+#
 def write_to_clickhouse(data):
     client = Client(host='localhost', port=9000, user='default', password='', database='default')
     ensure_table_exists(client)
@@ -134,9 +129,7 @@ def write_to_clickhouse(data):
 # ==============================
 # Главная функция: извлечение и запись
 # ==============================
-# 1. Получаем данные из Affise API.
-# 2. Если данные есть — пишем в ClickHouse.
-# 3. Если нет — логируем предупреждение.
+#
 def fetch_and_store_data():
     data = get_affise_data()
     if data:
