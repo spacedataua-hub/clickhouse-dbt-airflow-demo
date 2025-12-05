@@ -9,11 +9,7 @@ from clickhouse_driver import Client
 # ==============================
 # Настройка логирования
 # ==============================
-# Логирование помогает отслеживать процесс выполнения программы:
-# - DEBUG: подробные сообщения для отладки
-# - INFO: общая информация о ходе работы
-# - WARNING: предупреждения
-# - ERROR/CRITICAL: ошибки
+
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
