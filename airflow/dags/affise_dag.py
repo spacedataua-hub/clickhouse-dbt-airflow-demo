@@ -1,7 +1,8 @@
 from airflow import DAG
 from airflow.operators.python import PythonOperator
+from airflow.sensors.external_task import ExternalTaskSensor
 from airflow.utils.dates import days_ago
-from datetime import timedelta
+from datetime import datetime, time, timedelta
 import os
 import requests
 
@@ -54,10 +55,25 @@ with DAG(
     ### Affise → ClickHouse DAG
     This DAG fetches conversions from Affise API and loads them into ClickHouse daily at 07:00.
     It includes monitoring via email and Slack notifications.
+    It will only run after the Affise healthcheck DAG has succeeded.
     """
+
+    # Сенсор: ждём выполнения DAG "affise_healthcheck"
+    wait_for_healthcheck = ExternalTaskSensor(
+        task_id="wait_for_affise_healthcheck",
+        external_dag_id="affise_healthcheck",   # имя DAG, который проверяет API
+        external_task_id="check_affise_api",    # имя задачи внутри healthcheck DAG
+        execution_date_fn=lambda dt: datetime.combine(dt.date(), time(6, 0)),  # ровно в 06:00
+        poke_interval=60,        # проверять каждую минуту
+        timeout=120,             # максимум 2 минуты → 2 проверки
+        mode="poke",             # можно оставить poke, чтобы точно 2 раза проверил
+    )
 
     run_affise_job = PythonOperator(
         task_id="fetch_and_store_conversions",
         python_callable=fetch_and_store_conversions,
         on_failure_callback=notify_slack,  # мониторинг
     )
+
+    # Задачи: сначала ждём healthcheck, потом запускаем ETL
+    wait_for_healthcheck >> run_affise_job
