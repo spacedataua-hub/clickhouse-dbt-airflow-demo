@@ -1,0 +1,12 @@
+﻿version: 2
+
+sources:
+  - name: clickhouse
+    description: "Raw data from Affise stored in ClickHouse"
+    tables:
+      - name: affise_conversions_raw
+        description: "Raw conversions data from Affise API"
+        tests:
+          - freshness:
+              warn_after: {count: 1, period: day}
+              error_after: {count: 2, period: day}

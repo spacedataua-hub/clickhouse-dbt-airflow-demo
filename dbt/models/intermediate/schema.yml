@@ -1,0 +1,23 @@
+version: 2
+
+models:
+  - name: int_affise_metrics
+    description: "Intermediate model: aggregated metrics by offers from Affise."
+    columns:
+      - name: offer_id
+        description: "Unique identifier of the offer"
+        tests:
+          - not_null
+          - unique
+      - name: total_conversions
+        description: "Number of approved conversions for the offer"
+        tests:
+          - not_null
+      - name: total_payout
+        description: "Total payout amount for the offer in USD"
+        tests:
+          - not_null
+      - name: avg_payout
+        description: "Average payout amount per conversion for the offer"
+        tests:
+          - not_null

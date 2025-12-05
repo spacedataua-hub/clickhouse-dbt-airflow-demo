@@ -1,0 +1,31 @@
+version: 2
+
+models:
+  - name: stg_affise_conversions
+    description: "Staging model for Affise raw conversions. Removes duplicates based on business fields and standardizes timestamps."
+    columns:
+      - name: offer_id
+        description: "Unique identifier of the offer from Affise"
+        tests:
+          - not_null
+      - name: affiliate_id
+        description: "Unique identifier of the affiliate/partner"
+        tests:
+          - not_null
+      - name: conversion_time
+        description: "Conversion timestamp in UTC standardized format"
+        tests:
+          - not_null
+      - name: payout
+        description: "Conversion payout amount in USD"
+        tests:
+          - not_null
+          - relationships:
+              to: ref('int_affise_metrics')
+              field: payout
+      - name: status
+        description: "Conversion status (approved, declined, pending)"
+        tests:
+          - not_null
+          - accepted_values:
+              values: ["approved", "declined", "pending"]

@@ -1,12 +1,12 @@
-affise_project:                # имя профиля (совпадает с name в dbt_project.yml)
-  target: dev                  # активная цель
+affise_project:                # profile name (must match "profile" in dbt_project.yml)
+  target: dev                  # active target
   outputs:
     dev:
-      type: clickhouse         # драйвер ClickHouse
-      schema: default          # база данных (в ClickHouse это database)
-      host: clickhouse-server  # хост (если в docker-compose, то имя сервиса)
-      port: 9000               # порт для нативного протокола
-      user: default            # пользователь ClickHouse
-      password: ""             # пароль (если есть, укажи)
-      secure: False            # False = обычное подключение, True = TLS
-      threads: 4               # количество потоков для выполнения
+      type: clickhouse         # ClickHouse driver
+      schema: default          # database (in ClickHouse this is the database name)
+      host: clickhouse-server  # host (if using docker-compose, this is the service name)
+      port: 9000               # native protocol port
+      user: default            # ClickHouse user
+      password: ""             # password (set if required)
+      secure: False            # False = plain connection, True = TLS
+      threads: 4               # number of threads for execution

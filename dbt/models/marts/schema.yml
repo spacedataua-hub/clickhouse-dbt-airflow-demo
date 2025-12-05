@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: mrt_affise_dashboard
+    description: "Final data mart for marketing and BI. Contains KPI metrics aggregated by offers."
+    columns:
+      - name: offer_id
+        description: "Unique identifier of the offer"
+        tests:
+          - not_null
+          - unique
+      - name: offer_name
+        description: "Human-readable name of the offer"
+        tests:
+          - not_null
+      - name: total_conversions
+        description: "Number of approved conversions for the offer"
+        tests:
+          - not_null
+      - name: total_payout
+        description: "Total payout amount for the offer in USD"
+        tests:
+          - not_null
+      - name: avg_payout
+        description: "Average payout amount per conversion for the offer"
+        tests:
+          - not_null
