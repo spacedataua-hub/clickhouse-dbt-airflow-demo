@@ -1,6 +1,7 @@
 version: '3'
+
 services:
-  # База данных для Airflow
+  # Database for Airflow
   postgres:
     image: postgres:13
     environment:
@@ -10,9 +11,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  # Планировщик Airflow
+  # Airflow Scheduler
   airflow-scheduler:
-    image: apache/airflow:2.9.0
+    build: ./airflow   # build custom image from Dockerfile in ./airflow
     command: scheduler
     environment:
       AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
@@ -24,9 +25,9 @@ services:
     depends_on:
       - postgres
 
-  # Веб-интерфейс Airflow
+  # Airflow Webserver
   airflow-webserver:
-    image: apache/airflow:2.9.0
+    build: ./airflow   # build custom image from Dockerfile in ./airflow
     command: webserver
     environment:
       AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres:5432/airflow
@@ -40,6 +41,16 @@ services:
     depends_on:
       - postgres
       - airflow-scheduler
+
+  # dbt service
+  dbt:
+    build: ./dbt   # build custom image from Dockerfile in ./dbt
+    volumes:
+      - ./dbt:/usr/app/dbt
+    working_dir: /usr/app/dbt
+    command: ["dbt", "run"]
+    depends_on:
+      - postgres
 
 volumes:
   postgres_data:

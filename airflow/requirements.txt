@@ -1,0 +1,11 @@
+# Airflow providers
+apache-airflow-providers-clickhouse==1.0.0
+apache-airflow-providers-postgres==5.7.0
+
+# Utilities
+python-dotenv>=1.0.0
+requests>=2.31.0
+
+# Monitoring and notifications
+slack-sdk>=3.26.0
+
